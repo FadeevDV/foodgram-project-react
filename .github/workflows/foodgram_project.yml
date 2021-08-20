@@ -48,7 +48,7 @@ jobs:
         with:
           push: true
           context: ./backend/
-          tags: ${{ secrets.DOCKER_USERNAME }}/foodgram-project-react:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/foodgram_backend:latest
           
    
   deploy:
@@ -64,8 +64,8 @@ jobs:
           passphrase: ${{ secrets.PASSPHRASE }} 
           stack_file_name: docker-compose.yaml
           script: |
-            sudo docker pull dfadeevzld/foodgram-project-react:latest
-            sudo docker stop $(sudo docker ps -a -q)
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram_backend:latest
+            sudo docker-compose stop
             sudo docker-compose rm backend
             # Создаст файл для переменных окружения
             touch .env

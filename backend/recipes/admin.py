@@ -1,7 +1,7 @@
 from django.contrib import admin
 from import_export.admin import ImportMixin
 
-from .models import Favorites, Ingredient, IngredientItem, Recipe, Tag
+from .models import Favorites, Ingredient, IngredientForRecipe, Recipe, Tag
 from .resources import IngredientResource
 
 
@@ -9,17 +9,13 @@ class FavoriteAdmin(admin.ModelAdmin):
     list_display = ('id', 'recipe', 'user')
 
 
-class IngredientItemAdmin(admin.ModelAdmin):
+class IngredientForRecipeAdmin(admin.ModelAdmin):
     list_display = ('id', 'ingredient', 'recipe', 'amount')
 
 
 class RecipeAdmin(admin.ModelAdmin):
-    list_display = (
-        'id', 'author', 'name',
-    )
-    search_fields = ('name',)
+    list_display = ('id', 'author', 'name',)
     list_filter = ('author', 'name', 'tags')
-    empty_value_display = '-пусто-'
 
 
 class IngredientAdmin(ImportMixin, admin.ModelAdmin):
@@ -32,7 +28,7 @@ class TagAdmin(admin.ModelAdmin):
     list_display = ('name', 'color', 'slug')
 
 
-admin.site.register(IngredientItem, IngredientItemAdmin)
+admin.site.register(IngredientForRecipe, IngredientForRecipeAdmin)
 admin.site.register(Tag, TagAdmin)
 admin.site.register(Ingredient, IngredientAdmin)
 admin.site.register(Recipe, RecipeAdmin)

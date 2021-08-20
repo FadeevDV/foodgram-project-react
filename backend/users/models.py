@@ -8,15 +8,15 @@ class CustomUser(AbstractUser):
     username = models.CharField(
         verbose_name='Имя пользователя',
         unique=True,
-        max_length=200
+        max_length=150
     )
     first_name = models.CharField(
         verbose_name='Имя',
-        max_length=200
+        max_length=150
     )
     last_name = models.CharField(
         verbose_name='Фамилия',
-        max_length=200
+        max_length=150
     )
     email = models.EmailField(
         verbose_name='Адрес электронной почты',
