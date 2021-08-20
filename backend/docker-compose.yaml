@@ -10,19 +10,17 @@ services:
       - ./.env
   web:
     image: dfadeevzld/foodgram-backend:1.0
-    #build: .
-    #restart: always
-    #command: gunicorn ./backend/foodgram-api.wsgi:application --bind 0.0.0.0:8000
+
     ports:
       - "8000:8000"
     volumes:
       # Контейнер web будет работать с данными, хранящиеся в томе static_value,
       # через свою директорию /code/static/
-      - static_value:/code/static/
+      - static_value:/code/backend_static/
 
       # Данные, хранящиеся в томе media_value, будут доступны в контейнере web
       # через директорию /code/media/
-      - media_value:/code/media/
+      - media_value:/code/backend_media/
     depends_on:
       - db
     env_file:
@@ -44,18 +42,15 @@ services:
 
       # Контейнер nginx будет работать с данными, хранящиеся в томе static_value,
       # через свою директорию /var/html/static/
-      - static_value:/var/html/static/
+      - static_value:/var/html/backend_static/
 
-      # Данные, хранящиеся в томе media_value, будут доступны в контейнере nginx
       # через директорию /var/html/media/
-      - media_value:/var/html/media/
+      - media_value:/var/html/backend_media/
 
     depends_on:
-      # Контейнер nginx должен быть запущен после контейнера web
       - web
 
 volumes:
   postgres_data:
-  # Добавляем новые тома
   static_value:
   media_value:
