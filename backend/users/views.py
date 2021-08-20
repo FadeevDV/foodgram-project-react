@@ -1,73 +1,49 @@
-from uuid import uuid1
-
-from django.core.mail import send_mail
+from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
-from rest_framework import status, viewsets
+from djoser.views import UserViewSet
+from rest_framework import permissions, status
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
-from rest_framework.views import APIView
-from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework import permissions
-from .models import User
-from .serializers import (UserEmailSerializer, UserLoginSerializer, UserSerializer)
+
+from .models import Follow
+from .serializers import FollowSerializer, ShowFollowsSerializer
+
+User = get_user_model()
 
 
-class UserViewSet(viewsets.ModelViewSet):
-    """Модель обработки запросов пользователя"""
-    serializer_class = UserSerializer
-    queryset = User.objects.all()
-    permission_classes = permissions.IsAuthenticated
-    lookup_field = 'username'
+class CustomUserViewSet(UserViewSet):
 
-    @action(
-        detail=False, methods=['PATCH', 'GET'],
-        permission_classes=(IsAuthenticated,)
-    )
-    def me(self, request):
-        serializer = UserSerializer(request.user,
-                                    data=request.data,
-                                    partial=True)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-class ConfirmationCodeView(APIView):
-
-    def post(self, request):
-        """Обработка POST запроса на получение Confirmation code"""
-        serializer = UserEmailSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        email = serializer.data['email']
-        secret = str(uuid1())  # генерация уникального ключа
-        User.objects.create(email=email, secret=secret)
-        send_mail(
-            'Ваш секретный код',
-            secret,
-            settings.ADMIN_EMAIL,
-            [email],
-            fail_silently=False,
+    @action(detail=True,
+            methods=["GET", "DELETE"],
+            url_path='subscribe',
+            url_name='subscribe',
+            permission_classes=[permissions.IsAuthenticated])
+    def subscribe(self, request, id):
+        author = get_object_or_404(User, id=id)
+        serializer = FollowSerializer(
+            data={'user': request.user.id, 'author': id}
         )
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        if request.method == "GET":
+            serializer.is_valid(raise_exception=True)
+            serializer.save(user=request.user)
+            serializer = ShowFollowsSerializer(author)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        follow = get_object_or_404(Follow, user=request.user, author__id=id)
+        follow.delete()
+        return Response(f'{request.user} отписался от {follow.author}',
+                        status=status.HTTP_204_NO_CONTENT)
 
-
-class UserLoginView(APIView):
-    """ Модель авторизации пользователя """
-
-    def post(self, request):
-        """
-        Обработка POST запроса на получение JWT по email и секретному коду
-        """
-        serializer = UserLoginSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        email = serializer.data['email']
-
-        user = get_object_or_404(User, email=email)
-
-        refresh = RefreshToken.for_user(user)  # получаем токен
-
-        return Response(
-            {"access": str(refresh.access_token)},
-            status=status.HTTP_200_OK,
-        )
+    @action(detail=False,
+            methods=["GET"],
+            url_path='subscriptions',
+            url_name='subscriptions',
+            permission_classes=[permissions.IsAuthenticated])
+    def show_follows(self, request):
+        user_obj = User.objects.filter(following__user=request.user)
+        paginator = PageNumberPagination()
+        paginator.page_size = 6
+        result_page = paginator.paginate_queryset(user_obj, request)
+        serializer = ShowFollowsSerializer(
+            result_page, many=True, context={'current_user': request.user})
+        return paginator.get_paginated_response(serializer.data)

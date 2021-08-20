@@ -1,32 +1,19 @@
-from django_filters import rest_framework as filters
+import django_filters as filters
 
-from .models import Recipe
+from .models import Ingredient, Recipe
 
 
-class CharFilterInFilter(filters.BaseInFilter, filters.CharFilter):
-    pass
+class IngredientNameFilter(filters.FilterSet):
+    name = filters.CharFilter(field_name='name', lookup_expr='istartswith')
+
+    class Meta:
+        model = Ingredient
+        fields = ('name', 'measurement_unit')
 
 
 class RecipeFilter(filters.FilterSet):
-    ingredient = CharFilterInFilter(
-        field_name='ingredient__slug',
-        lookup_expr='in',
-    )
-    Tag = CharFilterInFilter(
-        field_name='tag__slug',
-        lookup_expr='in',
-
-    )
-    name = filters.CharFilter(
-        field_name='name',
-        lookup_expr='contains',
-    )
+    tags = filters.AllValuesMultipleFilter(field_name='tags__slug')
 
     class Meta:
         model = Recipe
-        fields = (
-            'tag',
-            'ingredient',
-            'Cooking_time',
-            'name',
-        )
+        fields = ('author', 'tags')

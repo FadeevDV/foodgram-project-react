@@ -1,24 +1,12 @@
-from django.urls import include, path
+from django.urls import include, re_path
 from rest_framework.routers import DefaultRouter
 
-from .views import ConfirmationCodeView, UserLoginView, UserViewSet
+from .views import CustomUserViewSet
 
-v1_patterns = (
-    [
-        path('email', ConfirmationCodeView.as_view()),
-        path('token', UserLoginView.as_view()),
-    ]
-)
-
-v1_router = DefaultRouter()
-
-v1_router.register(
-    r'users',
-    UserViewSet,
-    basename='users'
-)
+router = DefaultRouter()
+router.register('users', CustomUserViewSet)
 
 urlpatterns = [
-    path('auth/', include(v1_patterns)),
-    path('', include(v1_router.urls)),
+    re_path(r'^', include(router.urls)),
+    re_path(r'^auth/', include('djoser.urls.authtoken')),
 ]
