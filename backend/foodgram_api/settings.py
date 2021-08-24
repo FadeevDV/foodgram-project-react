@@ -166,3 +166,5 @@ DJOSER = {
         'token_destroy': ['rest_framework.permissions.IsAuthenticated'],
     }
 }
+
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240
