@@ -1,4 +1,4 @@
-# foodgram-project
+# foodgram-project-react
 
 [![foodgram-project workflow](https://github.com/FadeevDV/foodgram-project-react/actions/workflows/main.yml/badge.svg)](https://github.com/FadeevDV/foodgram-project-react/actions/workflows/main.yml)
 
