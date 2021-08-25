@@ -125,16 +125,6 @@ class RecipeSerializer(serializers.ModelSerializer):
             'cooking_time', 'pub_date'
         ]
 
-    #def validate(self, data):
-       # request = self.context['request']
-       # exist_recipe = Recipe.objects.filter(name=data['name']).exists
-       # if request.method == 'POST' and exist_recipe:
-           # raise serializers.ValidationError({
-               # "errors": f"Рецепт с таким названием: {data['name']} "
-                         # f"уже существует"
-           # })
-       # return data
-
     def get_is_favorited(self, obj):
         request = self.context.get('request')
         if request is None or request.user.is_anonymous:
