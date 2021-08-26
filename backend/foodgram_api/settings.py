@@ -13,7 +13,7 @@ SECRET_KEY = 'u0f3erjosvwx=f2$t!e=k=sh#lzp&4m3f^&j2(o@pnx-@)gb^o'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['178.154.247.237', 'localhost', 'fadeevkzn.tk', 'www.fadeevkzn.tk']
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 

@@ -42,7 +42,7 @@ class CustomUserViewSet(UserViewSet):
     def show_follows(self, request):
         user_obj = User.objects.filter(following__user=request.user)
         paginator = PageNumberPagination()
-        paginator.page_size = 3
+        paginator.page_size = 6
         result_page = paginator.paginate_queryset(user_obj, request)
         serializer = ShowFollowsSerializer(
             result_page, many=True, context={'current_user': request.user})
