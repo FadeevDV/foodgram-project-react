@@ -76,8 +76,3 @@ class FollowSerializer(serializers.ModelSerializer):
         author = get_object_or_404(User, pk=author.get('id'))
         user = validated_data.get('user')
         return Follow.objects.create(user=user, author=author)
-
-    def get_recipes(self, obj):
-        recipes = obj.recipes.all()[:settings.RECIPES_LIMIT]
-        request = self.context.get('request')
-        return FollowSerializer(recipes, many=True, context={'request': request}).data
