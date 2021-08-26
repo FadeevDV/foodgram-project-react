@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
 from rest_framework import serializers
@@ -40,7 +41,7 @@ class ShowFollowsSerializer(CustomUserSerializer):
                   'last_name', 'is_subscribed', 'recipes', 'recipes_count')
 
     def get_recipes(self, obj):
-        recipes = Recipe.objects.filter(author=obj)
+        recipes = obj.recipes.all()[:settings.RECIPES_LIMIT]
         return RecipeSubscriptionSerializer(recipes, many=True).data
 
     def get_recipes_count(self, obj):
