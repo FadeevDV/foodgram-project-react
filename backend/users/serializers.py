@@ -1,11 +1,11 @@
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
+from django.conf import settings
 from rest_framework import serializers
 
 from recipes.models import Recipe
 
 from .models import Follow
-from ..foodgram_api import settings
 
 User = get_user_model()
 
@@ -45,7 +45,7 @@ class ShowFollowsSerializer(CustomUserSerializer):
         request = self.context.get('request')
         return RecipeSubscriptionSerializer(recipes, many=True, context={'request': request}).data
 
-   def get_recipes_count(self, obj):
+   def get_recipes_count(obj):
         queryset = Recipe.objects.filter(author=obj)
         return queryset.count()
 
@@ -77,3 +77,4 @@ class FollowSerializer(serializers.ModelSerializer):
         author = get_object_or_404(User, pk=author.get('id'))
         user = validated_data.get('user')
         return Follow.objects.create(user=user, author=author)
+

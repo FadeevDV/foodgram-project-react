@@ -140,8 +140,6 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.'
                                 'PageNumberPagination',
     'PAGE_SIZE': 6,
-    'RECIPES_LIMIT': 3
-
 }
 
 DJOSER = {
@@ -169,3 +167,5 @@ DJOSER = {
 }
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240
+
+RECIPES_LIMIT=3
