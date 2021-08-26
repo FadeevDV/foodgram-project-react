@@ -1,6 +1,6 @@
 # foodgram-project-react
 
-[![foodgram-project workflow](https://github.com/FadeevDV/foodgram-project-react/actions/workflows/main.yml/badge.svg)](https://github.com/FadeevDV/foodgram-project-react/actions/workflows/main.yml)
+[![foodgram-project workflow](https://github.com/FadeevDV/foodgram-project-react/actions/workflows/foodgram_project.yml/badge.svg)](https://github.com/FadeevDV/foodgram-project-react/actions/workflows/main.yml)
 
 
 <p><a href="https://www.python.org/" rel="nofollow"><img src="https://camo.githubusercontent.com/938bc97e6c0351babffcd724243f78c6654833e451efc6ce3f5d66a635727a9c/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f2d507974686f6e2d3436343634363f3f7374796c653d666c61742d737175617265266c6f676f3d507974686f6e" alt="Python" data-canonical-src="https://img.shields.io/badge/-Python-464646??style=flat-square&amp;logo=Python" style="max-width:100%;"></a>
@@ -26,7 +26,7 @@ git clone https://github.com/FadeevDV/foodgram-project-react.git
 Установить соединение с сервером по протоколу ssh:
 
   ```
-  ssh username@00.000.000.00
+  ssh username@178.154.247.237
   ```
 
 Где username - имя пользователя, под которым будет выполнено подключение к серверу.
@@ -36,7 +36,7 @@ server_address - IP-адрес сервера или доменное имя.
 Например:
 
   ```
-  ssh praktikum@00.000.000.00
+  ssh praktikum@178.154.247.237
   ```
 
 В домашней директории проекта Создать папку app/:
@@ -131,19 +131,20 @@ server_address - IP-адрес сервера или доменное имя.
   sudo docker container ls
   ```
 
-В списке контейнеров копировать CONTAINER ID контейнера username/yamdb_final_web:latest (username - имя пользователя на DockerHub):
+В списке контейнеров копировать CONTAINER ID контейнера username/foodgram-backend:latest (username - имя пользователя на DockerHub):
 
   ```
-  CONTAINER ID   IMAGE                  COMMAND                  CREATED          STATUS          PORTS                NAMES
-  9338873f6a9e   nginx:1.19.6           "/docker-entrypoint.…"   45 seconds ago   Up 43 seconds   0.0.0.0:80->80/tcp   foodgram-project_nginx_1
-  d415a082597e   FadeevDV/foodgram:v1   "/bin/sh -c 'gunicor…"   47 seconds ago   Up 45 seconds                        foodgram-project_web_1
-  d8cb992faa64   postgres:12.4          "docker-entrypoint.s…"   4 minutes ago    Up 46 seconds   5432/tcp             foodgram-project_postgres_1
+  CONTAINER ID   IMAGE                                COMMAND                  CREATED         STATUS                       PORTS     NAMES
+8021345d9138   nginx:1.19.3                         "/docker-entrypoint.…"   7 minutes ago   Exited (0) 2 minutes ago               dfadeev-zld_nginx_1
+d3eb395676c6   dfadeevzld/foodgram_backend:latest   "/entrypoint.sh /bin…"   7 minutes ago   Exited (137) 2 minutes ago             dfadeev-zld_backend_1
+2a0bf05071ba   postgres:12.4                        "docker-entrypoint.s…"   8 minutes ago   Exited (137) 2 minutes ago             dfadeev-zld_db_1
+7caa47e8ad7e   dfadeevzld/foodgram_frontend:v1.0    "docker-entrypoint.s…"   8 minutes ago   Exited (0) 7 minutes ago               dfadeev-zld_frontend_1
   ```
 
 Выполнить вход в контейнер:
 
   ```
-  sudo docker exec -it d415a082597e bash
+  sudo docker exec -it d3eb395676c6 bash
   ```
 
 Внутри контейнера выполнить миграции:
@@ -186,7 +187,7 @@ server_address - IP-адрес сервера или доменное имя.
 
 
 * [Дмитрий Фадеев](https://github.com/FadeevDV)
-* [Сайт](http://00.00.00.00)
+* [Сайт](http://178.154.247.237) 
 
 
 
